@@ -14,4 +14,3 @@ def writeply(data, fname):
     el = plyfile.PlyElement.describe(data, 'vertex')
     plyfile.PlyData([el], text=True).write(fname)
     
-
