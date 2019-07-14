@@ -72,7 +72,7 @@ def computeRadiometryProjection(M, images_loaded, calibration, mode = "avg"):
                 compt += 1
         else:
             print("The mode is unknown. Please change it by : avg")
-            return -1
+            return 0
         avg_radiometry = avg_radiometry/compt
         return avg_radiometry
 

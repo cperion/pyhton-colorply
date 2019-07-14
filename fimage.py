@@ -6,6 +6,7 @@ Created on Sun Jul 14 10:17:54 2019
 """
 
 import  numpy as np
+from inputoutput.read_xml import readOri, readCalib
 
 def fimage(F, M, R, S) :
     """ Compute the image formula for the point M
