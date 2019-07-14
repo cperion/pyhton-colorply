@@ -81,12 +81,12 @@ def addCanalGenrated(coord, canal_data, canal_name):
 
 
 if __name__ == "__main__" :
-    fname = "nuageGREEN.ply"
+    fname = "NuageGREEN.ply"
     plydata = readply(fname)
     
     #1/ Converting the plydata to an array
     data = convertCoordinatesPlyArray(plydata)
-    print("The data from ", plydata, " is :\n", data)
+    print("The data from the plydata is :\n", data)
     
     #2/ Adding canal
     canal = "green"
