@@ -1,0 +1,3 @@
+=================================================================
+"/home/cedric/bin/mm3d" "AperiCloud" "el.ply" 
+ PID : 31865 ;   [Beginning at ] Sun Jul 14 11:28:11 2019
