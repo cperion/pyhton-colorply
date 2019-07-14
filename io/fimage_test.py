@@ -8,8 +8,8 @@ Created on Sun Jul 14 13:10:22 2019
 
 
 
-from xml.etree import ElementTree
-from xml import *
+#from xml.etree import ElementTree
+from read_xml import *
 
 
 #1/ Matrix Rotation
