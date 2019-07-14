@@ -147,7 +147,7 @@ def readCalibDist(calibxml):
     coeffDist = []
     for user in tree.xpath("/ExportAPERO/CalibrationInternConique/CalibDistortion/ModRad/CoeffDist"):
         coeffDist.append(user.text)
-        
+
     return np.array(coeffDist, float)
 
 ##
@@ -166,7 +166,7 @@ def readSize(calibxml):
     for user in tree.xpath("/ExportAPERO/CalibrationInternConique/SzIm"):
         size = user.text.split(" ")
 
-    return np.array(size, float)
+    return np.array(size, int)
 
 def readCalib(calibxml):
     """
@@ -198,7 +198,7 @@ def readCalib(calibxml):
     
     for user in tree.xpath("/ExportAPERO/CalibrationInternConique/SzIm"):
         size = user.text.split(" ")
-    size = (int(size[0], int(size[1])))
+    size = np.array(size, int)
 
     return F, PPS, coeffDist, size
 
