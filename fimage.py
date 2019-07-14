@@ -1,8 +1,8 @@
 import  numpy as np
 
 def fimage(F, M, R, S) :
-    """ Compute the image formula : 
-        
+    """ Compute the image formula for the point M
+        WITHOUT distosion
     """
     k=np.ndarray([0,0,1])
     R_inv=np.linalg.inv(R)
@@ -24,5 +24,8 @@ def radialStd(point, pps, a, b, c) :
     return point + dr
 
 def cimage(F, M, R, S, pps, a, b, c,) :
+    """ Compute the image formula for the point M
+        WITH distorsion
+    """
     return radialStd(fimage(F, M, R, S), pps, a, b ,c)
 
