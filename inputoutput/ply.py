@@ -11,7 +11,8 @@ import plyfile
 
 def readply(fname):
     """ Reads data from the ply file"""
-    plydata = plyfile.PlyData.read(fname)
+    ply = open(fname, mode='rb')
+    plydata = plyfile.PlyData.read(ply)
     return plydata
 
 def writeply(data, fname):

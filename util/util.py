@@ -12,4 +12,3 @@ def toascii(inputFile, outPutfile) :
     el2 = plyfile.PlyElement.describe(el.elements[0].data, 'vertex')
     plyfile.PlyData([el2], text=True).write(outPutfile)
 
-toascii('NuageGREEN.ply', 'elc.ply')
