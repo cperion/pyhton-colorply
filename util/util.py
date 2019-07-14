@@ -1,3 +1,10 @@
+# -*- coding: utf-8 -*-
+"""
+Created on Sun Jul 14 10:17:54 2019
+
+@author: Cédric Perion | Arthur Dujardin
+"""
+
 import plyfile
 
 def toascii(inputFile, outPutfile) :

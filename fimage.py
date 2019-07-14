@@ -1,3 +1,10 @@
+# -*- coding: utf-8 -*-
+"""
+Created on Sun Jul 14 10:17:54 2019
+
+@author: Cédric Perion | Arthur Dujardin
+"""
+
 import  numpy as np
 
 def fimage(F, M, R, S) :
@@ -14,7 +21,7 @@ def radialStd(point, pps, a, b, c) :
     """ Corrects the postion of the point according to the standard radial distorsion model"""
     r = np.linalg.norm(point-pps)
     rsquared= r*r
-    """ We use HORNEEERRRRRRRR to evluate ar2+br4+cr6"""
+    """ We use HORNEEERRRRRRRR to evaluate ar2+br4+cr6"""
     poly = c
     poly = poly*rsquared + b
     poly = poly*rsquared + a
