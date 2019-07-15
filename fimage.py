@@ -24,7 +24,7 @@ def fimage(F, M, R, S) :
 
 def radialStd(m_image, pps, a, b, c) :
     """ Corrects the postion of the point according to the standard radial distorsion model"""
-    r = np.dot(m_image[0:2] - pps, m_image[0:2] - pps)**0.5     #norm between m and pps
+    r = np.linalg.norm(m_image - pps)
 
     
     rsquared= r*r
@@ -34,8 +34,8 @@ def radialStd(m_image, pps, a, b, c) :
     poly = poly*rsquared + a
     poly = poly*rsquared
     """ HORNER DONE """
-    dr = poly*(m_image[0:2] - pps) # correction vector
-    return m_image[0:2] + dr
+    dr = poly*(m_image - pps) # correction vector
+    return m_image + dr
 
 def cimage(F, M, R, S, pps, a, b, c,) :
     """ Compute the image formula for the point M
@@ -55,7 +55,7 @@ if __name__ == "__main__" :
     
     calibxml = "example\\Ori-Calib\\AutoCal_Foc-24000_Cam-DSLRA850.xml"
     F, pps, dist, size = readCalib(calibxml)   # F , PPS, coeffDistorsion
-    print(F, pps, dist)
+    print("PPS : ", pps)
     
     nameIMGxml = "example\\Ori-Calib\\Orientation-Im3.JPG.xml"
     R, S = readOri(nameIMGxml)   # F , PPS, coeffDistorsion
