@@ -53,11 +53,11 @@ def cimage(F, M, R, S, pps, a, b, c,) :
 if __name__ == "__main__" :
     
     
-    calibxml = "example\\Ori-Calib\\AutoCal_Foc-24000_Cam-DSLRA850.xml"
+    calibxml = "example/Ori-Calib/AutoCal_Foc-24000_Cam-DSLRA850.xml"
     F, pps, dist, size = readCalib(calibxml)   # F , PPS, coeffDistorsion
     print("PPS : ", pps)
     
-    nameIMGxml = "example\\Ori-Calib\\Orientation-Im3.JPG.xml"
+    nameIMGxml = "example/Ori-Calib/Orientation-Im3.JPG.xml"
     R, S = readOri(nameIMGxml)   # F , PPS, coeffDistorsion
     print(R, S)
     
