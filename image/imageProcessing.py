@@ -9,9 +9,9 @@ Created on Sun Jul 14 10:17:54 2019
 import numpy as np
 import matplotlib.pyplot as plt
 
-from fimage import cimage
+from image.fimage import cimage
 from inputoutput.read_xml import readOri, readCalib
-from image import Image
+from image.image import Image
 
 
 #Import path to read files in a directory

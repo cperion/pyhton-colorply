@@ -9,6 +9,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 import inputoutput.read_xml as read_xml
 
+print("cool")
+
 
 
 class Image :
@@ -27,7 +29,7 @@ if __name__ == "__main__" :
     
     xmlfile = "example/Ori-Calib/Orientation-Im3.JPG.xml"
     R, S = read_xml.readOri(xmlfile)
-    image = Image("example/Im3.JPG", "red", plt.imread("example/Im3.JPG"), R, S)
+    image = Image("example/Im3.JPG", "red", plt.imread("example/Im3.jpg"), R, S)
     
     print("The name of the image is : ", image.name, "\n")
     print("The channel of the image is : ", image.channel, "\n")

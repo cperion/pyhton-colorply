@@ -5,8 +5,10 @@ Created on Sun Jul 14 10:17:54 2019
 @author: Cédric Perion | Arthur Dujardin
 """
 
+from os import getcwd
 import  numpy as np
-from inputoutput.read_xml import readOri, readCalib
+print(getcwd())
+from inputoutput.read_xml import readCalib, readOri
 
 def fimage(F, M, R, S) :
     """ Compute the image formula for the point M
