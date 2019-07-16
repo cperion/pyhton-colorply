@@ -25,14 +25,14 @@ def loadImages(outOri, dirName = "", ext = ".jpg", channel = "unknown") :
     """ 
     Reads all images and returns a list of images
     """
-    dirPath = getcwd() + "\\" + dirName
+    dirPath = getcwd() + "/" + dirName
     files = [f for f in listdir(dirPath) if (isfile(join(dirPath, f)) and f[len(f)-4:len(f)] == ext)]
     
     images_loaded = []
     for k in range(len(files)):
-        xmlfile = dirPath + "\\" + "Ori-" + outOri + "\\Orientation-" + files[k] + ".xml"
+        xmlfile = dirPath + "/" + "Ori-" + outOri + "/Orientation-" + files[k] + ".xml"
         R, S = readOri(xmlfile)      
-        images_loaded.append(Image((files[k]), channel, plt.imread(dirName + "\\" + files[k]), R, S))
+        images_loaded.append(Image((files[k]), channel, plt.imread(dirName + "/" + files[k]), R, S))
         
     
         
@@ -44,6 +44,8 @@ def loadImages(outOri, dirName = "", ext = ".jpg", channel = "unknown") :
 
 
 def computeRadiometryProjection(M, images_loaded, calibration, mode = "avg"):
+    """ Projects the M point in the loaded images according to the calibration
+     and the mode of computation of the radiometry"""
     n = len(images_loaded)
     for i in range(n):
         image = images_loaded[i]
@@ -71,7 +73,7 @@ def computeRadiometryProjection(M, images_loaded, calibration, mode = "avg"):
                 avg_radiometry += data[my, mx]
                 compt += 1
         else:
-            print("The mode is unknown. Please change it by : avg")
+            print("The mode is unknown or not implemented yet. Please change it to : avg")
             return 0
         avg_radiometry = avg_radiometry/compt
         return avg_radiometry
@@ -82,7 +84,7 @@ def computeRadiometryProjection(M, images_loaded, calibration, mode = "avg"):
 if __name__ == "__main__" :
     
     
-    calibxml = "example\\Ori-Calib\\AutoCal_Foc-24000_Cam-DSLRA850.xml"
+    calibxml = "example/Ori-Calib/AutoCal_Foc-24000_Cam-DSLRA850.xml"
     calibration = readCalib(calibxml)   # F , PPS, coeffDistorsion
     print(calibration)
     M = np.array([984.647, 996.995, 491.721])

@@ -25,19 +25,12 @@ class Image :
 if __name__ == "__main__" :
     print("***** Welcome *****\nThis script defines the class Image\n\n")
     
-    xmlfile = "example\\Ori-Calib\\Orientation-Im3.JPG.xml"
+    xmlfile = "example/Ori-Calib/Orientation-Im3.JPG.xml"
     R, S = read_xml.readOri(xmlfile)
-    image = Image("example\\Im3.JPG", "red", plt.imread("example\\Im3.JPG"), R, S)
+    image = Image("example/Im3.JPG", "red", plt.imread("example/Im3.JPG"), R, S)
     
     print("The name of the image is : ", image.name, "\n")
     print("The channel of the image is : ", image.channel, "\n")
     print("The data of the image is : \n", image.data, "\n")
     print("The rotation of the image is \n: ", image.R, "\n")
     print("The top of the image is : ", image.S, "\n")
-    
-    
-    
-    
-    
-    
-    
