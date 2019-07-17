@@ -56,7 +56,8 @@ class MainWindow(QWidget):
         computeButton.clicked.connect(self.compute)
 
         """ Progress bar"""
-        progress = QProgressBar(self)
+        self.progress = QProgressBar(self)
+        self.progress.setVisible(False)
 
         """ Boxes !"""
 
@@ -75,7 +76,7 @@ class MainWindow(QWidget):
         hbox5.addWidget(computeMethod)
         hbox5.addWidget(computeButton)
 
-        hbox6.addWidget(progress)
+        hbox6.addWidget(self.progress)
         
         vbox.addLayout(hbox1)
         vbox.addLayout(hbox2)
@@ -118,7 +119,7 @@ class MainWindow(QWidget):
         inPly=self.inPlyLine.text()
         outPly=self.outPlyLine.text()
         if len(imDir)*len(calDir)*len(inPly)*len(outPly) : # A sexy way to check if none of the fields are empty
-            pass
+            self.progress.setVisible(True)
             
         
 
