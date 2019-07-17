@@ -10,9 +10,9 @@ import numpy as np
 import matplotlib.pyplot as plt
 import math
 
-from fimage import cimage
+from image.fimage import cimage
 from inputoutput.read_xml import readOri, readCalib
-from image import Image
+from image.image import Image
 
 
 #Import path to read files in a directory
@@ -24,18 +24,38 @@ def loadImages(outOri, dirName = "", ext = ".jpg", channel = "unknown") :
     """ 
     Reads all images and returns a list of images
     """
-    dirPath = getcwd() + "\\" + dirName
+    dirPath = getcwd() + "/" + dirName
     files = [f for f in listdir(dirPath) if (isfile(join(dirPath, f)) and f[len(f)-4:len(f)] == ext)]
     
     images_loaded = []
     for k in range(len(files)):
-        xmlfile = dirPath + "\\" + "Ori-" + outOri + "\\Orientation-" + files[k] + ".xml"
+        xmlfile = dirPath + "/" + "Ori-" + outOri + "/Orientation-" + files[k] + ".xml"
         R, S = readOri(xmlfile)      
+<<<<<<< HEAD:imageProcessing.py
         images_loaded.append(Image((files[k]), channel, plt.imread(dirName + "\\" + files[k]), R, S))
     return images_loaded
 
 def computeRadiometryProjection(M, images_loaded, calibration):
         image = images_loaded
+=======
+        images_loaded.append(Image((files[k]), channel, plt.imread(dirName + "/" + files[k]), R, S))
+        
+    
+        
+
+    return images_loaded
+
+
+
+
+
+def computeRadiometryProjection(M, images_loaded, calibration, mode = "avg"):
+    """ Projects the M point in the loaded images according to the calibration
+     and the mode of computation of the radiometry"""
+    n = len(images_loaded)
+    for i in range(n):
+        image = images_loaded[i]
+>>>>>>> 708f4aebbb162077858872daf1d78778b3eab323:image/imageProcessing.py
         data = image.data
         R = image.R
         S = image.S
@@ -46,6 +66,7 @@ def computeRadiometryProjection(M, images_loaded, calibration):
         b = calibration[2][1]
         c = calibration[2][2]
         m = cimage(F, M, R, S, pps, a, b, c,)
+<<<<<<< HEAD:imageProcessing.py
         mx = int(np.round(m[0]))
         my = int(np.round(m[1]))
         return mx,my       
@@ -137,6 +158,32 @@ def meanPonderation(M,images_loaded,calibration):
 
 if __name__ == "__main__" :        
     calibxml = "example\\Ori-Calib\\AutoCal_Foc-24000_Cam-DSLRA850.xml"
+=======
+        
+        if mode.lower() == "avg":
+            avg_radiometry = 0
+            compt = 0
+            
+            mx = int(np.round(m[0]))
+            my = int(np.round(m[1]))
+            if ((0 < mx < size[0]) and (0 < my < size[1])):
+                print(int(np.round(m[0])), int(np.round(m[1])))
+                avg_radiometry += data[my, mx]
+                compt += 1
+        else:
+            print("The mode is unknown or not implemented yet. Please change it to : avg")
+            return 0
+        avg_radiometry = avg_radiometry/compt
+        return avg_radiometry
+
+
+
+
+if __name__ == "__main__" :
+    
+    
+    calibxml = "example/Ori-Calib/AutoCal_Foc-24000_Cam-DSLRA850.xml"
+>>>>>>> 708f4aebbb162077858872daf1d78778b3eab323:image/imageProcessing.py
     calibration = readCalib(calibxml)   # F , PPS, coeffDistorsion
     #print(calibration)
     M = np.array([984.647, 996.995, 491.721])

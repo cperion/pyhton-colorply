@@ -5,8 +5,10 @@ Created on Sun Jul 14 10:17:54 2019
 @author: Cédric Perion | Arthur Dujardin
 """
 
+from os import getcwd
 import  numpy as np
-from inputoutput.read_xml import readOri, readCalib
+print(getcwd())
+from inputoutput.read_xml import readCalib, readOri
 
 def fimage(F, M, R, S) :
     """ Compute the image formula for the point M
@@ -47,11 +49,11 @@ def cimage(F, M, R, S, pps, a, b, c,) :
 if __name__ == "__main__" :
     
     
-    calibxml = "example\\Ori-Calib\\AutoCal_Foc-24000_Cam-DSLRA850.xml"
+    calibxml = "example/Ori-Calib/AutoCal_Foc-24000_Cam-DSLRA850.xml"
     F, pps, dist, size = readCalib(calibxml)   # F , PPS, coeffDistorsion
     print("PPS : ", pps)
     
-    nameIMGxml = "example\\Ori-Calib\\Orientation-Im3.JPG.xml"
+    nameIMGxml = "example/Ori-Calib/Orientation-Im3.JPG.xml"
     R, S = readOri(nameIMGxml)   # F , PPS, coeffDistorsion
     print(R, S)
     
