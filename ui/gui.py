@@ -3,7 +3,7 @@
 import os
 import sys
 from PyQt5.QtWidgets import  (QWidget, QPushButton, QApplication, QMainWindow, QFileDialog,
-QLineEdit, QHBoxLayout, QVBoxLayout, QComboBox)
+QLineEdit, QHBoxLayout, QVBoxLayout, QComboBox, QProgressBar)
 from PyQt5.QtCore import pyqtSignal
 
 class MainWindow(QWidget):
@@ -20,6 +20,7 @@ class MainWindow(QWidget):
         hbox3=QHBoxLayout()
         hbox4=QHBoxLayout()
         hbox5=QHBoxLayout()
+        hbox6=QHBoxLayout()
         vbox=QVBoxLayout()
 
         computeMethod = QComboBox()
@@ -28,10 +29,10 @@ class MainWindow(QWidget):
         
 
         """ Text Lines !"""
-        self.imageDirLine = QLineEdit("Choose an image directory")
-        self.calibDirLine = QLineEdit("Choose a calibration directory")
-        self.inPlyLine = QLineEdit("Choose an input ply file")
-        self.outPlyLine = QLineEdit("Choose an output ply file")
+        self.imageDirLine = QLineEdit()
+        self.calibDirLine = QLineEdit()
+        self.inPlyLine = QLineEdit()
+        self.outPlyLine = QLineEdit()
 
 
         """ Buttons ! """
@@ -52,7 +53,10 @@ class MainWindow(QWidget):
         outPlyChooseButton.clicked.connect(self.select_output_ply)
 
         computeButton= QPushButton("COMPUTE")
+        computeButton.clicked.connect(self.compute)
 
+        """ Progress bar"""
+        progress = QProgressBar(self)
 
         """ Boxes !"""
 
@@ -71,12 +75,15 @@ class MainWindow(QWidget):
         hbox5.addWidget(computeMethod)
         hbox5.addWidget(computeButton)
 
+        hbox6.addWidget(progress)
+        
         vbox.addLayout(hbox1)
         vbox.addLayout(hbox2)
         vbox.addLayout(hbox3)
         vbox.addLayout(hbox4)
         vbox.addStretch(1)
         vbox.addLayout(hbox5)
+        vbox.addLayout(hbox6)
 
         self.setLayout(vbox)
 
@@ -103,8 +110,17 @@ class MainWindow(QWidget):
         fname = QFileDialog.getSaveFileName(self, 'Select output PLY file')
         if fname[0]:
             self.outPlyLine.setText(fname[0])
-        
 
+    def compute(self):
+        go = False
+        imDir=self.imageDirLine.text()
+        calDir=self.calibDirLine.text()
+        inPly=self.inPlyLine.text()
+        outPly=self.outPlyLine.text()
+        if len(imDir)*len(calDir)*len(inPly)*len(outPly) : # A sexy way to check if none of the fields are empty
+            pass
+            
+        
 
 app = QApplication(sys.argv)
 window= MainWindow()
