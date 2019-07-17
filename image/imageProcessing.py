@@ -114,7 +114,7 @@ def scalaire(M,images_loaded,calibration):
         if ((0<m[0]<size[0]) and (0<m[1]<size[1])):
             data = images_loaded[i].data
             radio.append(data[m[1],m[0]])
-            angle=math.acos(1/(math.sqrt((F[0]-m[0])**2+(F[1]-m[1])**2+F[2]**2)))
+            angle=math.acos(F[2]/(math.sqrt((F[0]-m[0])**2+(F[1]-m[1])**2+F[2]**2)))
             scal.append(angle)
     index=scal.index(min(scal))
     return radio[index]
