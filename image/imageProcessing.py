@@ -31,7 +31,7 @@ def loadImages(outOri, dirName = "", ext = ".jpg", channel = "unknown") :
     for k in range(len(files)):
         xmlfile = dirPath + "/" + "Ori-" + outOri + "/Orientation-" + files[k] + ".xml"
         R, S = readOri(xmlfile)      
-        images_loaded.append(Image((files[k]), channel, plt.imread(dirName + "\\" + files[k]), R, S))
+        images_loaded.append(Image((files[k]), channel, plt.imread(dirName + "/" + files[k]), R, S))
     return images_loaded
 
 def computeRadiometryProjection(M, images_loaded, calibration):
@@ -136,7 +136,7 @@ def meanPonderation(M,images_loaded,calibration):
     return avg_radiometry/compt
 
 if __name__ == "__main__" :        
-    calibxml = "example\\Ori-Calib\\AutoCal_Foc-24000_Cam-DSLRA850.xml"
+    calibxml = "example/Ori-Calib/AutoCal_Foc-24000_Cam-DSLRA850.xml"
     calibration = readCalib(calibxml)   # F , PPS, coeffDistorsion
     #print(calibration)
     M = np.array([984.647, 996.995, 491.721])
