@@ -2,9 +2,10 @@
 
 import os
 import sys
-from PyQt5.QtWidgets import  (QWidget, QToolTip, QPushButton, QApplication, QMainWindow, QFileDialog, QAction, QLabel, 
-QLineEdit, QHBoxLayout, QVBoxLayout)
+from PyQt5.QtWidgets import  (QWidget, QPushButton, QApplication, QMainWindow, QFileDialog,
+QLineEdit, QHBoxLayout, QVBoxLayout, QComboBox)
 from PyQt5.QtCore import pyqtSignal
+
 class MainWindow(QWidget):
     def __init__(self):
         super().__init__()
@@ -20,6 +21,12 @@ class MainWindow(QWidget):
         hbox4=QHBoxLayout()
         hbox5=QHBoxLayout()
         vbox=QVBoxLayout()
+
+        computeMethod = QComboBox()
+        computeMethod.addItem("Average")
+        """computeMethod."""
+        
+
         """ Text Lines !"""
         self.imageDirLine = QLineEdit("Choose an image directory")
         self.calibDirLine = QLineEdit("Choose a calibration directory")
@@ -29,15 +36,19 @@ class MainWindow(QWidget):
 
         """ Buttons ! """
         imageChooseButton = QPushButton("Choose your image folder")
+        imageChooseButton.setFixedWidth(250)
         imageChooseButton.clicked.connect(self.select_image_dir)
 
         calibChooseButton = QPushButton("Choose your calibration folder")
+        calibChooseButton.setFixedWidth(250)
         calibChooseButton.clicked.connect(self.select_calib_dir)
 
         inPlyChooseButton = QPushButton("Choose your input PLY file")
+        inPlyChooseButton.setFixedWidth(250)
         inPlyChooseButton.clicked.connect(self.select_input_ply)
 
         outPlyChooseButton = QPushButton("Choose your output PLY file")
+        outPlyChooseButton.setFixedWidth(250)
         outPlyChooseButton.clicked.connect(self.select_output_ply)
 
         computeButton= QPushButton("COMPUTE")
@@ -57,6 +68,7 @@ class MainWindow(QWidget):
         hbox4.addWidget(self.outPlyLine)
         hbox4.addWidget(outPlyChooseButton)
 
+        hbox5.addWidget(computeMethod)
         hbox5.addWidget(computeButton)
 
         vbox.addLayout(hbox1)
