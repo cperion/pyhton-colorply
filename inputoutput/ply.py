@@ -46,7 +46,7 @@ def convertCoordinatesPlyArray(plydata):
 
     return np.transpose(data)
 
-def addCanalFromPly(plydata, coord, canal):
+def addChannelFromPly(plydata, coord, canal):
     """
     Add the canal to the numpy data (converted by the function convertCoordinatePlyArray)
     @plydata : the .ply element

@@ -44,12 +44,6 @@ def cimage(F, M, R, S, pps, a, b, c,) :
     return radialStd(fimage(F, M, R, S), pps, a, b ,c)
 
 
-
-
-
-
-
-
 if __name__ == "__main__" :
     
     
@@ -69,9 +63,4 @@ if __name__ == "__main__" :
     a, b, c = dist[0], dist[1], dist[2]
     print("radialStd : ", radialStd(m, pps, a, b, c))
     
-    print("Formula image with distorsion : ", cimage(F, M, R, S, pps, a, b, c))
-    
-    
-    
-    
-    
+    print("Formula image with distorsion : ", cimage(F, M, R, S, pps, a, b, c))    

@@ -21,7 +21,6 @@ class Image :
         self.S = S
 
 
-
 if __name__ == "__main__" :
     print("***** Welcome *****\nThis script defines the class Image\n\n")
     

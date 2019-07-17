@@ -1,6 +1,0 @@
-Exit with code 1 
-Generated from line 325  of file /tmp/micmac/src/util/error.cpp 
-PID=31865
-Context=[Elise_Pile_Mess_0::display]
-GMEC:Kind of err User's error
-MM3D-Command=["/home/cedric/bin/mm3d" "AperiCloud" "el.ply" ]
