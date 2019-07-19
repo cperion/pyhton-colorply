@@ -6,11 +6,27 @@ from image.fimage import *
 from inputoutput.read_xml import *
 from util.util import *
 from inputoutput.ply import *
+from ui.gui import *
+from ui.call import *
+from ui.palette import *
 
 
 
 
 
+runMainWindow()
+
+
+
+
+
+
+
+
+
+
+
+"""
 calibxml = "example/Ori-Calib/AutoCal_Foc-24000_Cam-DSLRA850.xml"
 calibration = readCalib(calibxml)   # F , PPS, coeffDistorsion
 #print(calibration)
@@ -24,11 +40,10 @@ print(image.name)
 #print(image.R)
 
 #print(computeRadiometryProjection(M, images_loaded, calibration))
+"""
 
 
-
-
-
+"""
 cloudPath = "C3DC_QuickMac_1bandeAllCampariGCP_5images_SMALL.ply"
 plydata = readply(cloudPath)
 
@@ -45,19 +60,8 @@ mode = "avg"
 
 
 addChannelToCloud(cloudPath, calibration, outOri, dirName, ext, channelImages, mode)
+"""
 
 
 
 
-
-
-
-
-## DO NOT WORK BELOW
-
-#print(mean(M, images_loaded, calibration))
-#print(aleatoire(M, images_loaded, calibration))
-#print(distance(M,image.S, images_loaded, calibration))
-#print(distanceCentre(M, images_loaded, calibration))
-#print(scalaire(M,images_loaded,calibration))
-#print(meanPonderation(M,images_loaded,calibration))

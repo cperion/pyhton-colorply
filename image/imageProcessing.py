@@ -14,7 +14,8 @@ from image.fimage import cimage
 from inputoutput.read_xml import readOri, readCalib
 from image.image import Image
 from inputoutput.ply import *
-
+from inputoutput.imagefile import *
+from inputoutput.imagefile import loadImages
 
 #Import path to read files in a directory
 from os import listdir
@@ -22,36 +23,15 @@ from os import getcwd
 from os.path import isfile, join
 
 
-def loadImages(outOri = "Calib", dirName = "", ext = ".jpg", channel = "unknown") :
-    
-    """ 
-    Reads all images and returns a list of object image
-    """
-    dirPath = getcwd() + "/" + dirName
-    files = [f for f in listdir(dirPath) if (isfile(join(dirPath, f)) and f[len(f)-4:len(f)] == ext)]
-    
-    images_loaded = []
-    for k in range(len(files)):
-        xmlfile = dirPath + "/" + "Ori-" + outOri + "/Orientation-" + files[k] + ".xml"
-        
-        R, S = readOri(xmlfile)
-        data = plt.imread(dirName + "/" + files[k])
-        images_loaded.append(Image((files[k]), channel, data, R, S, (len(data), len(data[0]))))
-        
-        
-    return images_loaded
 
 
-def computeRadiometryProjection(M, images_loaded, calibration, mode = "avg"):       
-    if mode == "avg" :   
+def computeRadiometryProjection(M, images_loaded, calibration, mode = "avg"):
+    if mode == "avg" :
         n = len(images_loaded)
         L = []
         for i in range(n):
             
-            
             print("\timg : ", i+1)
-            
-            
             
             image = images_loaded[i]
             size = calibration[3]  # IMAGE size, coordinate i,j != x,y
@@ -59,18 +39,14 @@ def computeRadiometryProjection(M, images_loaded, calibration, mode = "avg"):
             R = image.R
             S = image.S
             F = calibration[0]
-            pps = calibration[1]
-            
-            
+            pps = calibration[1]  
             a = calibration[2][0]
-                  
             b = calibration[2][1]
             c = calibration[2][2]
             
             m = cimage(F, M, R, S, pps, a, b, c)
             mx = int(np.round(m[0]))
-            my = int(np.round(m[1]))            
-            
+            my = int(np.round(m[1]))   
             if (0 < mx < size[0]) and (0 < my < size[1]):  # because i,j != x,y
                 L.append(int(data[my, mx]/(2**16)*255))
                 
@@ -89,7 +65,7 @@ def computeRadiometryProjection(M, images_loaded, calibration, mode = "avg"):
     
     
    
-def addChannelToCloud(cloudPath = "dirpathtotheloudpoint", calibration = "pathToCalibXML", outOri = "OrientationPathImages", dirName = "", ext = "jpg", channelImages = "NIR", mode = "avg"):
+def addChannelToCloud(inPly = "dirpathtotheloudpoint", calFile = "pathToCalibXML", ori = "pathToOrientation", imDir = "ImageFolder", imExt = "jpg", channel = "NIR", mode = "avg"):
     """
     channelCloud = all, RED, NIR....
     tell witch of the channel to keep from the cloud 
@@ -97,26 +73,25 @@ def addChannelToCloud(cloudPath = "dirpathtotheloudpoint", calibration = "pathTo
     in that case
     """
     
-    plydata = readply(cloudPath)
+    calxml = readCalib(calFile)
+    plydata = readply(inPly)
     cloudData = convertCoordinatesPlyArray(plydata)
     listNewRadiometry = []
-
-    
-    print(len(cloudData))
     
     for i in range(len(cloudData)):
         M = cloudData[i, 0:3] #Collect the XYZ informations from the numpy cloud 
         print("step : ", i)
-        images_loaded = loadImages(outOri, dirName, ext, channelImages)
-        radiometry = computeRadiometryProjection(M, images_loaded, calibration, mode = "avg")
+        images_loaded = loadImages(ori, imDir, imExt, channel)
+        print("ok")
+        radiometry = computeRadiometryProjection(M, images_loaded, calxml, mode)
         listNewRadiometry.append(radiometry)
         
 
     print(len(listNewRadiometry))
     print("\n\n\n", listNewRadiometry)
-    
-    
-    newCloud = writeply(plydata, listNewRadiometry, channelImages, "cloud_generated.ply")
+
+
+    newCloud = writeply(plydata, listNewRadiometry, channel, "cloud_generated.ply")  
     return -1
     
     
