@@ -5,6 +5,7 @@ import sys
 from PyQt5.QtWidgets import  (QWidget, QPushButton, QApplication, QMainWindow, QFileDialog,
 QLineEdit, QHBoxLayout, QVBoxLayout, QComboBox, QProgressBar, QLabel)
 from PyQt5.QtCore import pyqtSignal
+from inputoutput.imagefile import loadImages
 
 class MainWindow(QWidget):
     def __init__(self):
@@ -129,9 +130,12 @@ class MainWindow(QWidget):
         if len(imDir)*len(calDir)*len(inPly)*len(outPly)*len(channel) : # A sexy way to check if none of the fields are empty
             self.progress.setVisible(True)
             self.warningLabel.setVisible(False)
+            images=loadImages(calDir, imDir, (".jpg", ".tif", ".JPG", ".TIF", ".JPEG", ".TIFF"), channel)
+            
         else :
             self.warningLabel.setVisible(True)
             self.progress.setVisible(False)
+        
             
         
 
