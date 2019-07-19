@@ -13,13 +13,18 @@ import math
 from image.fimage import cimage
 from inputoutput.read_xml import readOri, readCalib
 from image.image import Image
+<<<<<<< HEAD
 from inputoutput.ply import *
+=======
+from inputoutput.imagefile import loadImages
+>>>>>>> dd4c17c3d6d2dc317b4fb5861e0c5e29ca0727a1
 
 
 #Import path to read files in a directory
 from os import listdir
 from os import getcwd
 from os.path import isfile, join
+
 
 def loadImages(outOri = "Calib", dirName = "", ext = ".jpg", channel = "unknown") :
     
@@ -36,6 +41,7 @@ def loadImages(outOri = "Calib", dirName = "", ext = ".jpg", channel = "unknown"
         data = plt.imread(dirName + "/" + files[k])
         images_loaded.append(Image((files[k]), channel, data, R, S, (len(data), len(data[0]))))
     return images_loaded
+
 
 def computeRadiometryProjection(M, images_loaded, calibration, mode = "avg"):       
     if mode == "avg" :   
