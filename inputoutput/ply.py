@@ -48,11 +48,7 @@ def convertCoordinatesPlyArray(plydata):
 
     return np.transpose(data)
 
-<<<<<<< HEAD
 def addChannelFromPly(plydata, coord, canal):
-=======
-def addchannelFromPly(plydata, coord, channel):
->>>>>>> 708f4aebbb162077858872daf1d78778b3eab323
     """
     Add the channel to the numpy data (converted by the function convertCoordinatePlyArray)
     @plydata : the .ply element
@@ -97,7 +93,7 @@ if __name__ == "__main__" :
     
     #2/ Adding channel
     channel = "green"
-    data = addchannelFromPly(plydata, data, channel)
+    data = addChannelFromPly(plydata, data, channel)
     print("\nAdding the channel ", channel, " to the data :\n", data)
     
     

@@ -9,8 +9,6 @@ import numpy as np
 import matplotlib.pyplot as plt
 import inputoutput.read_xml as read_xml
 
-print("cool")
-
 
 
 class Image :
