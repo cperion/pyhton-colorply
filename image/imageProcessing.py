@@ -13,6 +13,7 @@ import math
 from image.fimage import cimage
 from inputoutput.read_xml import readOri, readCalib
 from image.image import Image
+from inputoutput.ply import *
 
 
 #Import path to read files in a directory
@@ -20,9 +21,10 @@ from os import listdir
 from os import getcwd
 from os.path import isfile, join
 
-def loadImages(outOri, dirName = "", ext = ".jpg", channel = "unknown") :
+def loadImages(outOri = "Calib", dirName = "", ext = ".jpg", channel = "unknown") :
+    
     """ 
-    Reads all images and returns a list of images
+    Reads all images and returns a list of object image
     """
     dirPath = getcwd() + "/" + dirName
     files = [f for f in listdir(dirPath) if (isfile(join(dirPath, f)) and f[len(f)-4:len(f)] == ext)]
@@ -30,49 +32,114 @@ def loadImages(outOri, dirName = "", ext = ".jpg", channel = "unknown") :
     images_loaded = []
     for k in range(len(files)):
         xmlfile = dirPath + "/" + "Ori-" + outOri + "/Orientation-" + files[k] + ".xml"
-        R, S = readOri(xmlfile)      
-        images_loaded.append(Image((files[k]), channel, plt.imread(dirName + "/" + files[k]), R, S))
+        R, S = readOri(xmlfile)
+        data = plt.imread(dirName + "/" + files[k])
+        images_loaded.append(Image((files[k]), channel, data, R, S, (len(data), len(data[0]))))
     return images_loaded
 
-def computeRadiometryProjection(M, images_loaded, calibration):
-        image = images_loaded
-        data = image.data
-        R = image.R
-        S = image.S
-        size = calibration[3]
-        F = calibration[0]
-        pps = calibration[1]
-        a = calibration[2][0]
-        b = calibration[2][1]
-        c = calibration[2][2]
-        m = cimage(F, M, R, S, pps, a, b, c,)
-        mx = int(np.round(m[0]))
-        my = int(np.round(m[1]))
-        return mx,my       
+def computeRadiometryProjection(M, images_loaded, calibration, mode = "avg"):       
+    if mode == "avg" :   
+        n = len(images_loaded)
+        L = []
+        for i in range(n):
+            image = images_loaded[i]
+            size = calibration[3]  # IMAGE size, coordinate i,j != x,y
+            data = image.data
+            R = image.R
+            S = image.S
+            F = calibration[0]
+            pps = calibration[1]
+            
+            
+            a = calibration[2][0]
+                  
+            b = calibration[2][1]
+            c = calibration[2][2]
+            
+            m = cimage(F, M, R, S, pps, a, b, c)
+            mx = int(np.round(m[0]))
+            my = int(np.round(m[1]))
+            
+            if (0 < mx < size[0]) and (0 < my < size[1]):  # because i,j != x,y
+                L.append(data[my, mx])
+            
+        return mean(L)
     
-def mean(M,images_loaded,calibration):
-    avg_radiometry=0
-    compt=0
-    size = calibration[3]
-    n=len(images_loaded) 
-    for i in range(n):
-        m=computeRadiometryProjection(M,images_loaded[i],calibration)  
-        if ((0 < m[0] < size[0]) and (0 < m[1] < size[1])):
-            data = images_loaded[i].data
-            avg_radiometry+=data[m[1],m[0]]
-            compt+=1
-    return avg_radiometry/compt
+    elif mode == "alea":    
+        return aleatoire(M,images_loaded,calibration)
+    
+    elif mode == "":
+        pass
+            
+            #ajouterfonctions
+    
+    return -1       
+    
+    
+   
+def addChannelToCloud(cloudPath = "dirpathtotheloudpoint", channelCloud = "selectTheChannelYouWant", calibration = "pathToCalibXML", outOri = "OrientationPathImages", dirName = "", ext = "jpg", channelImages = "NIR", mode = "avg"):
+    """
+    channelCloud = all, RED, NIR....
+    tell witch of the channel to keep from the cloud 
+    because mono channel cloud are 3 components (R, V, B = grey), so we need to have only one information
+    in that case
+    """
+    
+    plydata = readply(cloudPath)
+    cloudData = convertPlyArray(plydata, channelCloud)
+    listNewRadiometry = []
+    for i in range(len(cloudData)):
+        M = cloudData[i, 0:3] #Collect the XYZ informations from the numpy cloud 
+        
+        images_loaded = loadImages(outOri, dirName, ext, channelImages)
+        radiometry = computeRadiometryProjection(M, images_loaded, calibration, mode = "avg")
+        listNewRadiometry.append(radiometry)
+    
+    cloudData = addchannelGenerated(cloudData, listNewRadiometry, channelImages)
+    newCloud = writeply(cloudData, "cloud_generated")
+    return -1
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+def mean(L):
+    n = len(L)
+    avg = 0
+    for k in range(n):
+        avg += L[k]
+    return avg/n
 
 def aleatoire(M,images_loaded,calibration):
     radio=[]        
     size = calibration[3]
     n=len(images_loaded)
     for i in range(n):
-        m=computeRadiometryProjection(M,images_loaded[i],calibration)  
+        image = images_loaded[i]
+        size = calibration[3]  # IMAGE size, coordinate i,j != x,y
+        data = image.data
+        R = image.R
+        S = image.S
+        F = calibration[0]
+        pps = calibration[1]
+        a = calibration[2][0]
+        b = calibration[2][1]
+        c = calibration[2][2]
+        
+        m = cimage(F, M, R, S, pps, a, b, c)
+        
         if ((0 < m[0] < size[0]) and (0 < m[1] < size[1])):
             data = images_loaded[i].data
             radio.append(data[m[1],m[0]])
     return random.choice(radio)
+
 
 def distance(M,S,images_loaded,calibration):
     radio=[]
@@ -94,7 +161,7 @@ def distanceCentre(M,images_loaded,calibration):
     size = calibration[3]
     n=len(images_loaded)
     for i in range(n):
-        m=computeRadiometryProjection(M,images_loaded[i],calibration)  
+        m=computeRadiometryProjection(M,images_loaded[i],calibration) ## a changer 
         if ((0 < m[0] < size[0]) and (0 < m[1] < size[1])):
             data = images_loaded[i].data
             radio.append(data[m[1],m[0]])
@@ -120,19 +187,28 @@ def scalaire(M,images_loaded,calibration):
     return radio[index]
 
 def meanPonderation(M,images_loaded,calibration):
+    #A debuger+ cas 1 valeur (NIR OU RED OU GREEn...) (et non R V B !!!)
+    
     moy=mean(M,images_loaded,calibration)
     avg_radiometry=0
     compt=0
     size = calibration[3]
     n=len(images_loaded) 
+    
     for i in range(n):
         m=computeRadiometryProjection(M,images_loaded[i],calibration)  
-        if ((0<m[0]<size[0]) and (0<m[1]<size[1])):
+        if ((0 < m[0] < size[0]) and (0 < m[1] < size[1])):
             data = images_loaded[i].data
-            if moy-data[m[1],m[0]]==np.array([0,0,0]):
-                continue
-            avg_radiometry+=(1/abs(moy-data[m[1],m[0]]))*data[m[1],m[0]]
-            compt+=1/abs(moy-data[m[1]-m[0]])
+            if data[m[1], m[0]].all() != moy.all():   # dans le de RVB, donc à mmodifier
+                avg_radiometry += (1/abs(moy - data[m[1], m[0]]))*data[m[1], m[0]]
+                
+                compt += 1/abs(moy - data[m[1], m[0]])
+                
+            else:
+                avg_radiometry = data[m[1], m[0]]
+                compt += 1
+
+                   
     return avg_radiometry/compt
 
 if __name__ == "__main__" :        

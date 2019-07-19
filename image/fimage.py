@@ -39,7 +39,7 @@ def radialStd(m_image, pps, a, b, c) :
     dr = poly*(m_image - pps) # correction vector
     return m_image + dr
 
-def cimage(F, M, R, S, pps, a, b, c,) :
+def cimage(F, M, R, S, pps, a, b, c) :
     """ Compute the image formula for the point M
         WITH distorsion
     """
