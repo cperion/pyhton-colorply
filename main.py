@@ -30,10 +30,9 @@ print(image.name)
 
 
 cloudPath = "C3DC_QuickMac_1bandeAllCampariGCP_5images.ply"
-channelCloud = "red"
 
-calibration = "example/Ori-1bande_All_CampariGCP/AutoCal_Foc-4000_Cam-SequoiaSequoia-GRE.xml"
-calibration = readCalib(calibxml)
+calibration = "example/Ori-1bande_All_CampariGCP/AutoCal_Foc-4000_Cam-SequoiaSequoia-NIR.xml"
+calibration = readCalib(calibration)
 
 ### BUG TAILLE CAPTEUR TROP GRAND QUE REALITE
 print(calibration[3])
@@ -48,7 +47,7 @@ channelImages = "NIR"
 mode = "avg"
 
 
-addChannelToCloud(cloudPath, channelCloud, calibration, outOri, dirName, ext, channelImages, mode)
+addChannelToCloud(cloudPath, calibration, outOri, dirName, ext, channelImages, mode)
 
 
 
