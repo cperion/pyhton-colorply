@@ -20,12 +20,12 @@ def readply(fname):
 def writeply(plydata, dataChannel, newChannelName,  fname):
     """
     Writes data to the plyfile
-    @param data : the data of the channel to add to convert in ply
-    @paramtype data : np.array
-    @param fname : the name of the ply file
-    @paramtype fname : string
-    :return : ply data
-    :rtype : plydata
+    @param data: the data to convert in ply
+    @paramtype data: numpy.ndarray
+    @param fname: the name of the ply file
+    @paramtype fname: string
+    :return: ply data
+    :rtype: plydata
     """
 
     dtype = plydata.elements[0].data.dtype.descr

@@ -16,17 +16,17 @@ class MainWindow(QWidget):
     def initUI(self):
         self.setWindowTitle('Python-colorply')
 
-        hbox1=QHBoxLayout()
-        hbox2=QHBoxLayout()
-        hbox3=QHBoxLayout()
-        hbox4=QHBoxLayout()
-        hbox5=QHBoxLayout()
+        hbox1=QHBoxLayout() # image directory line
+        hbox2=QHBoxLayout() # calibration directory line
+        hbox3=QHBoxLayout() # input ply line
+        hbox4=QHBoxLayout() # output ply line
+        hbox5=QHBoxLayout() # channel, compute method and run button line
         hbox6=QHBoxLayout()
         vbox=QVBoxLayout()
-
+        """computeMethod."""
         computeMethod = QComboBox()
         computeMethod.addItem("Average")
-        """computeMethod."""
+       
         
 
         """ Text Lines !"""
@@ -57,7 +57,7 @@ class MainWindow(QWidget):
         outPlyChooseButton.setFixedWidth(250)
         outPlyChooseButton.clicked.connect(self.select_output_ply)
 
-        computeButton= QPushButton("COMPUTE")
+        computeButton= QPushButton("RUN")
         computeButton.clicked.connect(self.compute)
 
         """ Progress bar"""
@@ -131,7 +131,7 @@ class MainWindow(QWidget):
             self.progress.setVisible(True)
             self.warningLabel.setVisible(False)
             images=loadImages(calDir, imDir, (".jpg", ".tif", ".JPG", ".TIF", ".JPEG", ".TIFF"), channel)
-            
+
         else :
             self.warningLabel.setVisible(True)
             self.progress.setVisible(False)
