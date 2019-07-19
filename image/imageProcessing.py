@@ -13,11 +13,7 @@ import math
 from image.fimage import cimage
 from inputoutput.read_xml import readOri, readCalib
 from image.image import Image
-<<<<<<< HEAD
 from inputoutput.ply import *
-=======
-from inputoutput.imagefile import loadImages
->>>>>>> dd4c17c3d6d2dc317b4fb5861e0c5e29ca0727a1
 
 
 #Import path to read files in a directory
@@ -48,6 +44,12 @@ def computeRadiometryProjection(M, images_loaded, calibration, mode = "avg"):
         n = len(images_loaded)
         L = []
         for i in range(n):
+            
+            
+            print("\timg : ", i+1)
+            
+            
+            
             image = images_loaded[i]
             size = calibration[3]  # IMAGE size, coordinate i,j != x,y
             data = image.data
@@ -68,8 +70,9 @@ def computeRadiometryProjection(M, images_loaded, calibration, mode = "avg"):
             
             if (0 < mx < size[0]) and (0 < my < size[1]):  # because i,j != x,y
                 L.append(data[my, mx])
-            
-        return mean(L)
+                
+        if len(L) != 0:
+            return mean(L)
     
     elif mode == "alea":    
         return aleatoire(M,images_loaded,calibration)
@@ -94,15 +97,18 @@ def addChannelToCloud(cloudPath = "dirpathtotheloudpoint", channelCloud = "selec
     plydata = readply(cloudPath)
     cloudData = convertPlyArray(plydata, channelCloud)
     listNewRadiometry = []
+
+    
     for i in range(len(cloudData)):
         M = cloudData[i, 0:3] #Collect the XYZ informations from the numpy cloud 
-        
+        print("step : ", i)
         images_loaded = loadImages(outOri, dirName, ext, channelImages)
         radiometry = computeRadiometryProjection(M, images_loaded, calibration, mode = "avg")
         listNewRadiometry.append(radiometry)
-    
-    cloudData = addchannelGenerated(cloudData, listNewRadiometry, channelImages)
-    newCloud = writeply(cloudData, "cloud_generated")
+        
+
+    print("\n\n\n", listNewRadiometry)
+    newCloud = writeply(plydata, listNewRadiometry, channelImages, "cloud_generated.ply")
     return -1
     
     
