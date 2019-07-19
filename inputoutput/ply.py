@@ -20,12 +20,12 @@ def readply(fname):
 def writeply(data, fname):
     """
     Writes data to the plyfile
-    @param data : the data to convert in ply
-    @paramtype data : np.array
-    @param fname : the name of the ply file
-    @paramtype fname : string
-    :return : ply data
-    :rtype : plydata
+    @param data: the data to convert in ply
+    @paramtype data: numpy.ndarray
+    @param fname: the name of the ply file
+    @paramtype fname: string
+    :return: ply data
+    :rtype: plydata
     """
     el = plyfile.PlyElement.describe(data, 'vertex')
     plyfile.PlyData([el], text=True).write(fname)
