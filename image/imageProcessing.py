@@ -33,9 +33,12 @@ def loadImages(outOri = "Calib", dirName = "", ext = ".jpg", channel = "unknown"
     images_loaded = []
     for k in range(len(files)):
         xmlfile = dirPath + "/" + "Ori-" + outOri + "/Orientation-" + files[k] + ".xml"
+        
         R, S = readOri(xmlfile)
         data = plt.imread(dirName + "/" + files[k])
         images_loaded.append(Image((files[k]), channel, data, R, S, (len(data), len(data[0]))))
+        
+        
     return images_loaded
 
 
@@ -66,10 +69,10 @@ def computeRadiometryProjection(M, images_loaded, calibration, mode = "avg"):
             
             m = cimage(F, M, R, S, pps, a, b, c)
             mx = int(np.round(m[0]))
-            my = int(np.round(m[1]))
+            my = int(np.round(m[1]))            
             
             if (0 < mx < size[0]) and (0 < my < size[1]):  # because i,j != x,y
-                L.append(data[my, mx])
+                L.append(int(data[my, mx]/(2**16)*255))
                 
         if len(L) != 0:
             return mean(L)
@@ -82,11 +85,11 @@ def computeRadiometryProjection(M, images_loaded, calibration, mode = "avg"):
             
             #ajouterfonctions
     
-    return -1       
+    return 0       
     
     
    
-def addChannelToCloud(cloudPath = "dirpathtotheloudpoint", channelCloud = "selectTheChannelYouWant", calibration = "pathToCalibXML", outOri = "OrientationPathImages", dirName = "", ext = "jpg", channelImages = "NIR", mode = "avg"):
+def addChannelToCloud(cloudPath = "dirpathtotheloudpoint", calibration = "pathToCalibXML", outOri = "OrientationPathImages", dirName = "", ext = "jpg", channelImages = "NIR", mode = "avg"):
     """
     channelCloud = all, RED, NIR....
     tell witch of the channel to keep from the cloud 
@@ -95,9 +98,11 @@ def addChannelToCloud(cloudPath = "dirpathtotheloudpoint", channelCloud = "selec
     """
     
     plydata = readply(cloudPath)
-    cloudData = convertPlyArray(plydata, channelCloud)
+    cloudData = convertCoordinatesPlyArray(plydata)
     listNewRadiometry = []
 
+    
+    print(len(cloudData))
     
     for i in range(len(cloudData)):
         M = cloudData[i, 0:3] #Collect the XYZ informations from the numpy cloud 
@@ -107,7 +112,10 @@ def addChannelToCloud(cloudPath = "dirpathtotheloudpoint", channelCloud = "selec
         listNewRadiometry.append(radiometry)
         
 
+    print(len(listNewRadiometry))
     print("\n\n\n", listNewRadiometry)
+    
+    
     newCloud = writeply(plydata, listNewRadiometry, channelImages, "cloud_generated.ply")
     return -1
     
@@ -127,7 +135,7 @@ def mean(L):
     avg = 0
     for k in range(n):
         avg += L[k]
-    return avg/n
+    return int(avg/n)
 
 def aleatoire(M,images_loaded,calibration):
     radio=[]        
