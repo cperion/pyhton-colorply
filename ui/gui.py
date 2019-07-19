@@ -168,15 +168,7 @@ class MainWindow(QWidget):
         modestr = str(self.computeMethod.currentText())
         mode = self.modeDict[modestr]
 
-        ## TEST ONLY
-        imDir = "D:\home\Arthur\Documents\Informatique\Projet_GitHub\pyhton-colorply\example"
-        imExt = ".TIF"
-        ori = "D:\home\Arthur\Documents\Informatique\Projet_GitHub\pyhton-colorply\example\Ori-1bande_All_CampariGCP"
-        calDir = "D:\home\Arthur\Documents\Informatique\Projet_GitHub\pyhton-colorply\example\Ori-1bande_All_CampariGCP\AutoCal_Foc-4000_Cam-SequoiaSequoia-NIR.xml"
-        inPly = "D:\home\Arthur\Documents\Informatique\Projet_GitHub\pyhton-colorply\C3DC_QuickMac_1bandeAllCampariGCP_5images_SMALL.ply"
-        outPly = "test.ply"
-        channel = "NTF"
-        mode = "avg"
+
  
         if len(imDir)*len(calDir)*len(inPly)*len(outPly)*len(channel) : # A sexy way to check if none of the fields are empty
             self.progress.setVisible(True)
