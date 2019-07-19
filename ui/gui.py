@@ -2,19 +2,21 @@
 
 import os
 import sys
-from ui.palette import *
+
 from PyQt5.QtWidgets import  (QWidget, QPushButton, QApplication, QMainWindow, QFileDialog,
 QLineEdit, QHBoxLayout, QVBoxLayout, QComboBox, QProgressBar, QLabel)
-from PyQt5.QtCore import pyqtSignal
+from PyQt5.QtCore import pyqtSignal, QThread   # Threading
 from inputoutput.ply import *
 from image.imageProcessing import addChannelToCloud
 from inputoutput.imagefile import loadImages
 from image.imageProcessing import *
+from ui.palette import *
 
 
 class MainWindow(QWidget):
     def __init__(self):
         super().__init__()
+        #QThread.__init__(self)
         self.initUI()
         
 
@@ -55,8 +57,6 @@ class MainWindow(QWidget):
         self.calibDirLine = QLineEdit()
         self.inPlyLine = QLineEdit()
         self.outPlyLine = QLineEdit()
-        self.outPlyName = QLineEdit()
-        self.outPlyName.setFixedWidth(120)
         
         self.warningLabel = QLabel("Error: please fill all the fields !")
         self.warningLabel.setVisible(False)
@@ -80,7 +80,7 @@ class MainWindow(QWidget):
         inPlyChooseButton.clicked.connect(self.select_input_ply)
 
         outPlyChooseButton = QPushButton("Choose your output folder")
-        outPlyChooseButton.setFixedWidth(120)
+        outPlyChooseButton.setFixedWidth(250)
         outPlyChooseButton.clicked.connect(self.select_output_ply)
 
         computeButton= QPushButton("RUN")
@@ -108,7 +108,6 @@ class MainWindow(QWidget):
 
         hbox5.addWidget(self.outPlyLine)
         hbox5.addWidget(outPlyChooseButton)
-        hbox5.addWidget(self.outPlyName)
 
         hbox6.addWidget(self.computeMethod)
         hbox6.addWidget(self.imageChannelLabel)
@@ -129,8 +128,6 @@ class MainWindow(QWidget):
         vbox.addLayout(hbox7)
 
         self.setLayout(vbox)
-
-
         self.show()
 
 
@@ -155,7 +152,7 @@ class MainWindow(QWidget):
             self.inPlyLine.setText(fname[0])
 
     def select_output_ply(self):
-        fname = QFileDialog.getSaveFileName(self, 'Select output PLY file')
+        fname = QFileDialog.getSaveFileName(self, 'Select output PLY file name')
         if fname[0]:
             self.outPlyLine.setText(fname[0])
 
@@ -170,9 +167,7 @@ class MainWindow(QWidget):
         channel=self.imageChannelLine.text()
         modestr = str(self.computeMethod.currentText())
         mode = self.modeDict[modestr]
-        
-        
-        
+
         ## TEST ONLY
         imDir = "D:\home\Arthur\Documents\Informatique\Projet_GitHub\pyhton-colorply\example"
         imExt = ".TIF"
@@ -183,7 +178,6 @@ class MainWindow(QWidget):
         channel = "NTF"
         mode = "avg"
  
-        
         if len(imDir)*len(calDir)*len(inPly)*len(outPly)*len(channel) : # A sexy way to check if none of the fields are empty
             self.progress.setVisible(True)
             self.warningLabel.setVisible(False)
