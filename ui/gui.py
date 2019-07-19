@@ -2,6 +2,7 @@
 
 import os
 import sys
+from palette import *
 from PyQt5.QtWidgets import  (QWidget, QPushButton, QApplication, QMainWindow, QFileDialog,
 QLineEdit, QHBoxLayout, QVBoxLayout, QComboBox, QProgressBar, QLabel)
 from PyQt5.QtCore import pyqtSignal
@@ -140,5 +141,11 @@ class MainWindow(QWidget):
         
 
 app = QApplication(sys.argv)
+
+
+app = setDarkTheme(app)
+
+
+
 window= MainWindow()
 app.exec_()
