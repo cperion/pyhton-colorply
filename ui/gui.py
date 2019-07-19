@@ -2,7 +2,7 @@
 
 import os
 import sys
-from palette import *
+from ui.palette import *
 from PyQt5.QtWidgets import  (QWidget, QPushButton, QApplication, QMainWindow, QFileDialog,
 QLineEdit, QHBoxLayout, QVBoxLayout, QComboBox, QProgressBar, QLabel)
 from PyQt5.QtCore import pyqtSignal
