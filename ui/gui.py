@@ -3,7 +3,7 @@
 import os
 import sys
 from PyQt5.QtWidgets import  (QWidget, QPushButton, QApplication, QMainWindow, QFileDialog,
-QLineEdit, QHBoxLayout, QVBoxLayout, QComboBox, QProgressBar)
+QLineEdit, QHBoxLayout, QVBoxLayout, QComboBox, QProgressBar, QLabel)
 from PyQt5.QtCore import pyqtSignal
 
 class MainWindow(QWidget):
@@ -30,9 +30,13 @@ class MainWindow(QWidget):
 
         """ Text Lines !"""
         self.imageDirLine = QLineEdit()
+        self.imageChannelLabel = QLabel("Channel name :")
+        self.imageChannelLine = QLineEdit()
         self.calibDirLine = QLineEdit()
         self.inPlyLine = QLineEdit()
         self.outPlyLine = QLineEdit()
+        self.warningLabel = QLabel("Error: please fill all the fields !")
+        self.warningLabel.setVisible(False)
 
 
         """ Buttons ! """
@@ -74,9 +78,12 @@ class MainWindow(QWidget):
         hbox4.addWidget(outPlyChooseButton)
 
         hbox5.addWidget(computeMethod)
+        hbox5.addWidget(self.imageChannelLabel)
+        hbox5.addWidget(self.imageChannelLine)
         hbox5.addWidget(computeButton)
 
         hbox6.addWidget(self.progress)
+        hbox6.addWidget(self.warningLabel)
         
         vbox.addLayout(hbox1)
         vbox.addLayout(hbox2)
@@ -118,8 +125,13 @@ class MainWindow(QWidget):
         calDir=self.calibDirLine.text()
         inPly=self.inPlyLine.text()
         outPly=self.outPlyLine.text()
-        if len(imDir)*len(calDir)*len(inPly)*len(outPly) : # A sexy way to check if none of the fields are empty
+        channel=self.imageChannelLine.text()
+        if len(imDir)*len(calDir)*len(inPly)*len(outPly)*len(channel) : # A sexy way to check if none of the fields are empty
             self.progress.setVisible(True)
+            self.warningLabel.setVisible(False)
+        else :
+            self.warningLabel.setVisible(True)
+            self.progress.setVisible(False)
             
         
 

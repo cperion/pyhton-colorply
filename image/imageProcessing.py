@@ -13,6 +13,7 @@ import math
 from image.fimage import cimage
 from inputoutput.read_xml import readOri, readCalib
 from image.image import Image
+from inputoutput.imagefile import loadImages
 
 
 #Import path to read files in a directory
@@ -20,19 +21,7 @@ from os import listdir
 from os import getcwd
 from os.path import isfile, join
 
-def loadImages(outOri, dirName = "", ext = ".jpg", channel = "unknown") :
-    """ 
-    Reads all images and returns a list of images
-    """
-    dirPath = getcwd() + "/" + dirName
-    files = [f for f in listdir(dirPath) if (isfile(join(dirPath, f)) and f[len(f)-4:len(f)] == ext)]
-    
-    images_loaded = []
-    for k in range(len(files)):
-        xmlfile = dirPath + "/" + "Ori-" + outOri + "/Orientation-" + files[k] + ".xml"
-        R, S = readOri(xmlfile)      
-        images_loaded.append(Image((files[k]), channel, plt.imread(dirName + "/" + files[k]), R, S))
-    return images_loaded
+
 
 def computeRadiometryProjection(M, images_loaded, calibration):
         image = images_loaded

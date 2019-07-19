@@ -7,7 +7,6 @@ Created on Sun Jul 14 10:17:54 2019
 
 from os import getcwd
 import  numpy as np
-print(getcwd())
 from inputoutput.read_xml import readCalib, readOri
 
 def fimage(F, M, R, S) :
