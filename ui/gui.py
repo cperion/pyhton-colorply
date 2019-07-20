@@ -1,7 +1,7 @@
 """ This is the python-colorply GUI """
 
 import os
-import sys
+
 
 from PyQt5.QtWidgets import  (QWidget, QPushButton, QApplication, QMainWindow, QFileDialog,
 QLineEdit, QHBoxLayout, QVBoxLayout, QComboBox, QProgressBar, QLabel)
@@ -12,6 +12,79 @@ from inputoutput.imagefile import loadImages
 from image.imageProcessing import *
 from ui.palette import *
 
+
+class RunThread(QThread):
+    signal = pyqtSignal('PyQt_PyObject')
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self, window):
+        go = False
+        imDir=window.imageDirLine.text()
+        imExt = "." + str(window.imageExt.currentText())
+        oriDir = window.imageOri.text()
+        cal=window.calibDirLine.text()
+        inPly=window.inPlyLine.text()
+        outPly=window.outPlyLine.text()
+        channel=window.imageChannelLine.text()
+        modestr = str(window.computeMethod.currentText())
+        mode = window.modeDict[modestr]
+
+        ## TEST ONLY
+       # imDir = "D:\home\Arthur\Documents\Informatique\Projet_GitHub\pyhton-colorply\example"
+       # imExt = ".TIF"
+       # ori = "D:\home\Arthur\Documents\Informatique\Projet_GitHub\pyhton-colorply\example\Ori-1bande_All_CampariGCP"
+       # calDir = "D:\home\Arthur\Documents\Informatique\Projet_GitHub\pyhton-colorply\example\Ori-1bande_All_CampariGCP\AutoCal_Foc-4000_Cam-SequoiaSequoia-NIR.xml"
+       # inPly = "D:\home\Arthur\Documents\Informatique\Projet_GitHub\pyhton-colorply\C3DC_QuickMac_1bandeAllCampariGCP_5images_SMALL.ply"
+       # outPly = "test.ply"
+       # channel = "NTF"
+       # mode = "avg"
+ 
+        if len(oriDir)*len(imDir)*len(cal)*len(inPly)*len(outPly)*len(channel) : # A sexy way to check if none of the fields are empty
+            
+            try:
+                window.progress.setVisible(True)
+                window.warningLabel.setVisible(False)
+                window.progress.setValue(1.0)
+                images=loadImages(oriDir, imDir, (".jpg", ".tif", ".JPG", ".TIF", ".JPEG", ".TIFF"), channel)
+                window.progress.setMaximum(1.0)
+                addChannelToCloud(inPly, cal, oriDir, imDir, (".jpg", ".tif", ".JPG", ".TIF", ".JPEG", ".TIFF"), channel, mode, outPly, window.progress)
+                
+                
+            except FileNotFoundError:
+                window.errwindow=ErrorWindow("File not found !!!")
+                window.errwindow.show()
+
+        else :
+            window.warningLabel.setVisible(True)
+            window.progress.setVisible(False)
+        
+
+
+class ErrorWindow(QWidget):
+    def __init__(self, errmsg):
+        super().__init__()
+        #QThread.__init__(self)
+        self.initUI(errmsg)
+
+    
+    def initUI(self, errmsg):
+        self.setWindowTitle("An error has occured")
+
+        hbox1=QHBoxLayout()
+
+        self.errLabel=QLabel("Oups something bad happened :")
+        self.errMsgLabel=QLabel(errmsg)
+
+        hbox1.addWidget(self.errLabel)
+        hbox1.addWidget(self.errMsgLabel)
+
+        vbox=QVBoxLayout()
+        vbox.addLayout(hbox1)
+
+        self.setLayout(vbox)
+    
 
 class MainWindow(QWidget):
     def __init__(self):
@@ -157,40 +230,13 @@ class MainWindow(QWidget):
             self.outPlyLine.setText(fname[0])
 
     def compute(self):
-        go = False
-        imDir=self.imageDirLine.text()
-        imExt = "." + str(self.imageExt.currentText())
-        ori = self.imageOri.text()
-        calDir=self.calibDirLine.text()
-        inPly=self.inPlyLine.text()
-        outPly=self.outPlyLine.text()
-        channel=self.imageChannelLine.text()
-        modestr = str(self.computeMethod.currentText())
-        mode = self.modeDict[modestr]
+        thread = RunThread()
+        thread.run(self)
 
-        ## TEST ONLY
-       # imDir = "D:\home\Arthur\Documents\Informatique\Projet_GitHub\pyhton-colorply\example"
-       # imExt = ".TIF"
-       # ori = "D:\home\Arthur\Documents\Informatique\Projet_GitHub\pyhton-colorply\example\Ori-1bande_All_CampariGCP"
-       # calDir = "D:\home\Arthur\Documents\Informatique\Projet_GitHub\pyhton-colorply\example\Ori-1bande_All_CampariGCP\AutoCal_Foc-4000_Cam-SequoiaSequoia-NIR.xml"
-       # inPly = "D:\home\Arthur\Documents\Informatique\Projet_GitHub\pyhton-colorply\C3DC_QuickMac_1bandeAllCampariGCP_5images_SMALL.ply"
-       # outPly = "test.ply"
-       # channel = "NTF"
-       # mode = "avg"
- 
-        if len(imDir)*len(calDir)*len(inPly)*len(outPly)*len(channel) : # A sexy way to check if none of the fields are empty
-            self.progress.setVisible(True)
-            self.warningLabel.setVisible(False)
-            
-            images=loadImages(calDir, imDir, (".jpg", ".tif", ".JPG", ".TIF", ".JPEG", ".TIFF"), channel)
-            
-            addChannelToCloud(inPly, calDir, ori, imDir, imExt, channel, mode, outPly)
-            
-        else :
-            self.warningLabel.setVisible(True)
-            self.progress.setVisible(False)
+    
         
             
+
 
 def runMainWindow():
         

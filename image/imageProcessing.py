@@ -31,7 +31,7 @@ def computeRadiometryProjection(M, images_loaded, calibration, mode = "avg"):
         L = []
         for i in range(n):
             
-            print("\timg : ", i+1)
+            
             
             image = images_loaded[i]
             size = calibration[3]  # IMAGE size, coordinate i,j != x,y
@@ -65,35 +65,33 @@ def computeRadiometryProjection(M, images_loaded, calibration, mode = "avg"):
     
     
    
-def addChannelToCloud(inPly, calFile, ori, imDir, imExt, channel, mode, outPly):
+def addChannelToCloud(inPly, calFile, ori, imDir, imExt, channel, mode, outPly, progress):
     """
     channelCloud = all, RED, NIR....
     tell witch of the channel to keep from the cloud 
     because mono channel cloud are 3 components (R, V, B = grey), so we need to have only one information
     in that case
     """
-    
-    calxml = readCalib(calFile)
-    plydata = readply(inPly)
+    try :
+        calxml = readCalib(calFile)
+        plydata = readply(inPly)
+    except FileNotFoundError :
+        raise FileNotFoundError
     cloudData = convertCoordinatesPlyArray(plydata)
     listNewRadiometry = []
-    
-    for i in range(len(cloudData)):
+    n=len(cloudData)
+    progress.setMaximum(n)
+    for i in range(n):
         M = cloudData[i, 0:3] #Collect the XYZ informations from the numpy cloud 
-        print("step : ", i)
         images_loaded = loadImages(ori, imDir, imExt, channel)
-        print("ok")
         radiometry = computeRadiometryProjection(M, images_loaded, calxml, mode)
         listNewRadiometry.append(radiometry)
-        
-
-    print(len(listNewRadiometry))
-    print("\n\n\n", listNewRadiometry)
-
-
-    newCloud = writeply(plydata, listNewRadiometry, channel, outPly)  
-    return -1
-    
+        progress.setValue(i)
+        return
+    newCloud = writeply(plydata, listNewRadiometry, channel, outPly)
+    progress.setValue(n)
+    print(listNewRadiometry)
+    return
     
     
     

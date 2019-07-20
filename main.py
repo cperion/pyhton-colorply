@@ -13,7 +13,6 @@ from ui.palette import *
 
 
 
-
 runMainWindow()
 
 

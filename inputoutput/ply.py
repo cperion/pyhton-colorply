@@ -13,7 +13,10 @@ import plyfile
 
 def readply(fname):
     """ Reads data from the ply file"""
-    ply = open(fname, mode='rb')
+    try:
+        ply = open(fname, mode='rb')
+    except FileNotFoundError :
+        raise FileExistsError
     plydata = plyfile.PlyData.read(ply)
     return plydata
 
