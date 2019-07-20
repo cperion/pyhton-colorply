@@ -22,7 +22,6 @@ class RunThread(QThread):
     def run(self, window):
         go = False
         imDir=window.imageDirLine.text()
-        imExt = "." + str(window.imageExt.currentText())
         oriDir = window.imageOri.text()
         cal=window.calibDirLine.text()
         inPly=window.inPlyLine.text()
@@ -44,46 +43,33 @@ class RunThread(QThread):
         if len(oriDir)*len(imDir)*len(cal)*len(inPly)*len(outPly)*len(channel) : # A sexy way to check if none of the fields are empty
             
             try:
-                window.progress.setVisible(True)
+                
                 window.warningLabel.setVisible(False)
                 window.progress.setValue(1.0)
                 images=loadImages(oriDir, imDir, (".jpg", ".tif", ".JPG", ".TIF", ".JPEG", ".TIFF"), channel)
                 window.progress.setMaximum(1.0)
-                addChannelToCloud(inPly, cal, oriDir, imDir, (".jpg", ".tif", ".JPG", ".TIF", ".JPEG", ".TIFF"), channel, mode, outPly, window.progress)
+                window.progress.setVisible(True)
+                var = addChannelToCloud(inPly, cal, oriDir, imDir, (".jpg", ".tif", ".JPG", ".TIF", ".JPEG", ".TIFF"), channel, mode, outPly, window.progress)
+                if var :
+                    window.warningLabel.setText("All done !")
+                    window.warningLabel.setVisible(True)
+                return
                 
                 
             except FileNotFoundError:
-                window.errwindow=ErrorWindow("File not found !!!")
-                window.errwindow.show()
+                window.progress.setVisible(False)
+                window.warningLabel.setText("One of the files / folders has not been found !")
+                window.warningLabel.setVisible(True)
+                return
 
         else :
             window.warningLabel.setVisible(True)
             window.progress.setVisible(False)
+            return
         
 
 
-class ErrorWindow(QWidget):
-    def __init__(self, errmsg):
-        super().__init__()
-        #QThread.__init__(self)
-        self.initUI(errmsg)
 
-    
-    def initUI(self, errmsg):
-        self.setWindowTitle("An error has occured")
-
-        hbox1=QHBoxLayout()
-
-        self.errLabel=QLabel("Oups something bad happened :")
-        self.errMsgLabel=QLabel(errmsg)
-
-        hbox1.addWidget(self.errLabel)
-        hbox1.addWidget(self.errMsgLabel)
-
-        vbox=QVBoxLayout()
-        vbox.addLayout(hbox1)
-
-        self.setLayout(vbox)
     
 
 class MainWindow(QWidget):
@@ -114,12 +100,6 @@ class MainWindow(QWidget):
                 }
         for k in self.modeDict:                             # adding the methods to a drop down menu
             self.computeMethod.addItem(k)
-        
-        self.imageExt = QComboBox()     
-        self.extList = ["JPG", "jpg", "TIF", "tif", "PNG", "png", "CR2", "DNG"]  # list of all extension available     
-        for k in range(len(self.extList)):                  # adding the possibilities
-            self.imageExt.addItem(self.extList[k])
-        self.imageExt.setFixedWidth(50)
     
 
         """ Text Lines !"""
@@ -137,10 +117,10 @@ class MainWindow(QWidget):
 
         """ Buttons ! """
         imageChooseButton = QPushButton("Choose your image folder")
-        imageChooseButton.setFixedWidth(194)
+        imageChooseButton.setFixedWidth(250)
         imageChooseButton.clicked.connect(self.select_image_dir)
         
-        oriChooseButton = QPushButton("Choose your images orientation folder")
+        oriChooseButton = QPushButton("Choose orientation folder")
         oriChooseButton.setFixedWidth(250)
         oriChooseButton.clicked.connect(self.select_ori_dir)
 
@@ -152,7 +132,7 @@ class MainWindow(QWidget):
         inPlyChooseButton.setFixedWidth(250)
         inPlyChooseButton.clicked.connect(self.select_input_ply)
 
-        outPlyChooseButton = QPushButton("Choose your output PLY save location")
+        outPlyChooseButton = QPushButton("Choose your output PLY file")
         outPlyChooseButton.setFixedWidth(250)
         outPlyChooseButton.clicked.connect(self.select_output_ply)
 
@@ -167,8 +147,6 @@ class MainWindow(QWidget):
 
         hbox1.addWidget(self.imageDirLine)
         hbox1.addWidget(imageChooseButton)
-        
-        hbox1.addWidget(self.imageExt)
         
         hbox2.addWidget(self.imageOri)
         hbox2.addWidget(oriChooseButton)

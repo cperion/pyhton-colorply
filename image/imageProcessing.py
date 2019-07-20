@@ -46,9 +46,11 @@ def computeRadiometryProjection(M, images_loaded, calibration, mode = "avg"):
             
             m = cimage(F, M, R, S, pps, a, b, c)
             mx = int(np.round(m[0]))
-            my = int(np.round(m[1]))   
+            my = int(np.round(m[1]))
+
+               
             if (0 < mx < size[0]) and (0 < my < size[1]):  # because i,j != x,y
-                L.append(int(data[my, mx]/(2**16)*255))
+                L.append(int(data[my, mx]*0.0038909912109375))
                 
         if len(L) != 0:
             return mean(L)
@@ -87,11 +89,11 @@ def addChannelToCloud(inPly, calFile, ori, imDir, imExt, channel, mode, outPly, 
         radiometry = computeRadiometryProjection(M, images_loaded, calxml, mode)
         listNewRadiometry.append(radiometry)
         progress.setValue(i)
-        return
+        
     newCloud = writeply(plydata, listNewRadiometry, channel, outPly)
     progress.setValue(n)
     print(listNewRadiometry)
-    return
+    return 1
     
     
     

@@ -35,8 +35,10 @@ from image.image import Image
 def loadImages(oriDir = ".", imDir = ".", exts = (".jpg", ".tif", ".JPG", ".TIF", ".JPEG", ".TIFF") , channel = "unknown") :
      
     #Reads all images and returns a list of images
-    
-    ls=listdir(imDir)
+    try :
+        ls=listdir(imDir)
+    except FileNotFoundError :
+        raise FileNotFoundError
     image_list = []
     for f in ls :
         file=join(imDir, f)
