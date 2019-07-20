@@ -43,7 +43,7 @@ class MainWindow(QWidget):
             self.computeMethod.addItem(k)
         
         self.imageExt = QComboBox()     
-        self.extList = ["JPG", "TIF", "PNG", "CR2", "DNG"]  # list of all extension available     
+        self.extList = ["JPG", "jpg", "TIF", "tif", "PNG", "png", "CR2", "DNG"]  # list of all extension available     
         for k in range(len(self.extList)):                  # adding the possibilities
             self.imageExt.addItem(self.extList[k])
         self.imageExt.setFixedWidth(50)
@@ -71,7 +71,7 @@ class MainWindow(QWidget):
         oriChooseButton.setFixedWidth(250)
         oriChooseButton.clicked.connect(self.select_ori_dir)
 
-        calibChooseButton = QPushButton("Choose your calibration folder")
+        calibChooseButton = QPushButton("Choose your calibration file")
         calibChooseButton.setFixedWidth(250)
         calibChooseButton.clicked.connect(self.select_calib_dir)
 
@@ -79,7 +79,7 @@ class MainWindow(QWidget):
         inPlyChooseButton.setFixedWidth(250)
         inPlyChooseButton.clicked.connect(self.select_input_ply)
 
-        outPlyChooseButton = QPushButton("Choose your output folder")
+        outPlyChooseButton = QPushButton("Choose your output PLY save location")
         outPlyChooseButton.setFixedWidth(250)
         outPlyChooseButton.clicked.connect(self.select_output_ply)
 
@@ -121,9 +121,9 @@ class MainWindow(QWidget):
         vbox.addLayout(hbox2)
         vbox.addLayout(hbox3)
         vbox.addLayout(hbox4)
+        vbox.addLayout(hbox5)
         
         vbox.addStretch(1)
-        vbox.addLayout(hbox5)
         vbox.addLayout(hbox6)
         vbox.addLayout(hbox7)
 
@@ -142,9 +142,9 @@ class MainWindow(QWidget):
             self.imageOri.setText(fname)
     
     def select_calib_dir(self):
-        fname = QFileDialog.getExistingDirectory(self, 'Select calibration directory')
-        if fname:
-            self.calibDirLine.setText(fname)
+        fname = QFileDialog.getOpenFileName(self, 'Select calibration file')
+        if fname[0]:
+            self.calibDirLine.setText(fname[0])
 
     def select_input_ply(self):
         fname = QFileDialog.getOpenFileName(self, 'Select input PLY file')
@@ -159,7 +159,7 @@ class MainWindow(QWidget):
     def compute(self):
         go = False
         imDir=self.imageDirLine.text()
-        imExt = str(self.imageExt.currentText())
+        imExt = "." + str(self.imageExt.currentText())
         ori = self.imageOri.text()
         calDir=self.calibDirLine.text()
         inPly=self.inPlyLine.text()
@@ -168,7 +168,15 @@ class MainWindow(QWidget):
         modestr = str(self.computeMethod.currentText())
         mode = self.modeDict[modestr]
 
-
+        ## TEST ONLY
+       # imDir = "D:\home\Arthur\Documents\Informatique\Projet_GitHub\pyhton-colorply\example"
+       # imExt = ".TIF"
+       # ori = "D:\home\Arthur\Documents\Informatique\Projet_GitHub\pyhton-colorply\example\Ori-1bande_All_CampariGCP"
+       # calDir = "D:\home\Arthur\Documents\Informatique\Projet_GitHub\pyhton-colorply\example\Ori-1bande_All_CampariGCP\AutoCal_Foc-4000_Cam-SequoiaSequoia-NIR.xml"
+       # inPly = "D:\home\Arthur\Documents\Informatique\Projet_GitHub\pyhton-colorply\C3DC_QuickMac_1bandeAllCampariGCP_5images_SMALL.ply"
+       # outPly = "test.ply"
+       # channel = "NTF"
+       # mode = "avg"
  
         if len(imDir)*len(calDir)*len(inPly)*len(outPly)*len(channel) : # A sexy way to check if none of the fields are empty
             self.progress.setVisible(True)
@@ -176,7 +184,7 @@ class MainWindow(QWidget):
             
             images=loadImages(calDir, imDir, (".jpg", ".tif", ".JPG", ".TIF", ".JPEG", ".TIFF"), channel)
             
-            addChannelToCloud(inPly, calDir, ori, imDir, imExt, channel, mode)
+            addChannelToCloud(inPly, calDir, ori, imDir, imExt, channel, mode, outPly)
             
         else :
             self.warningLabel.setVisible(True)

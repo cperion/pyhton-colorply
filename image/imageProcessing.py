@@ -65,7 +65,7 @@ def computeRadiometryProjection(M, images_loaded, calibration, mode = "avg"):
     
     
    
-def addChannelToCloud(inPly = "dirpathtotheloudpoint", calFile = "pathToCalibXML", ori = "pathToOrientation", imDir = "ImageFolder", imExt = "jpg", channel = "NIR", mode = "avg"):
+def addChannelToCloud(inPly, calFile, ori, imDir, imExt, channel, mode, outPly):
     """
     channelCloud = all, RED, NIR....
     tell witch of the channel to keep from the cloud 
@@ -91,7 +91,7 @@ def addChannelToCloud(inPly = "dirpathtotheloudpoint", calFile = "pathToCalibXML
     print("\n\n\n", listNewRadiometry)
 
 
-    newCloud = writeply(plydata, listNewRadiometry, channel, "cloud_generated.ply")  
+    newCloud = writeply(plydata, listNewRadiometry, channel, outPly)  
     return -1
     
     
