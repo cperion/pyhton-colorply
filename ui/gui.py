@@ -46,7 +46,6 @@ class RunThread(QThread):
                 
                 window.warningLabel.setVisible(False)
                 window.progress.setValue(1.0)
-                images=loadImages(oriDir, imDir, (".jpg", ".tif", ".JPG", ".TIF", ".JPEG", ".TIFF"), channel)
                 window.progress.setMaximum(1.0)
                 window.progress.setVisible(True)
                 var = addChannelToCloud(inPly, cal, oriDir, imDir, (".jpg", ".tif", ".JPG", ".TIF", ".JPEG", ".TIFF"), channel, mode, outPly, window.progress)

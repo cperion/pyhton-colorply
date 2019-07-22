@@ -83,9 +83,9 @@ def addChannelToCloud(inPly, calFile, ori, imDir, imExt, channel, mode, outPly, 
     listNewRadiometry = []
     n=len(cloudData)
     progress.setMaximum(n)
+    images_loaded = loadImages(ori, imDir, imExt, channel)
     for i in range(n):
-        M = cloudData[i, 0:3] #Collect the XYZ informations from the numpy cloud 
-        images_loaded = loadImages(ori, imDir, imExt, channel)
+        M = cloudData[i, 0:3] #Collect the XYZ informations from the numpy cloud
         radiometry = computeRadiometryProjection(M, images_loaded, calxml, mode)
         listNewRadiometry.append(radiometry)
         progress.setValue(i)
