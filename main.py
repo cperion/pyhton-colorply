@@ -1,3 +1,5 @@
+#! /bin/env python3
+
 from os import getcwd
 import numpy as np
 from image.image import *
