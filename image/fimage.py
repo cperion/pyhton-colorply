@@ -27,13 +27,10 @@ def fimage(F, M, R, S) :
     """
     k = np.array([0,0,1])
     R_inv = np.linalg.inv(R)
-    topdot = np.dot(k, F)
-    topdot = np.dot(topdot, R_inv)
-    topdot = np.dot(topdot, M - S)
-    bottomdot = np.dot(k, R_inv)
-    bottomdot = np.dot(bottomdot, M - S)
+    top = k.dot(F)*R_inv.dot(M-S)
+    bottom = k.dot(R).dot(M-S)
     
-    return F - topdot/bottomdot
+    return F - top/bottom
 
 def radialStd(m_image, pps, a, b, c) :
     """ Corrects the postion of the point according to the standard radial distorsion model
