@@ -28,7 +28,7 @@ def fimage(F, M, R, S) :
     k = np.array([0,0,1])
     R_inv = np.linalg.inv(R)
     top = k.dot(F)*R_inv.dot(M-S)
-    bottom = k.dot(R).dot(M-S)
+    bottom = k.dot(R_inv).dot(M-S)
     
     return F - top/bottom
 
