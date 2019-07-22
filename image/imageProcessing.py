@@ -106,11 +106,7 @@ def addChannelToCloud(inPly, calFile, ori, imDir, imExt, channel, mode, outPly, 
     
     
 def mean(L):
-    n = len(L)
-    avg = 0
-    for k in range(n):
-        avg += L[k]
-    return int(avg/n)
+    return int(sum(L)/len(L))
 
 def aleatoire(M,images_loaded,calibration):
     radio=[]        
