@@ -93,6 +93,7 @@ class MainWindow(QWidget):
         self.computeMethod = QComboBox()
         self.modeDict = {                                   # dictionnary of all methods available
                 "Average" : "avg",
+                "Median" : "median",
                 "Random" : "alea",
                 "Weighted Average" : "wavg",
                 "Distance" : "dist",

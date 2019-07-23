@@ -16,7 +16,7 @@ def readply(fname):
     try:
         ply = open(fname, mode='rb')
     except FileNotFoundError :
-        raise FileExistsError
+        raise FileNotFoundError
     plydata = plyfile.PlyData.read(ply)
     return plydata
 
