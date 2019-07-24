@@ -26,6 +26,7 @@ from os.path import isfile, join
 
 
 def computeRadiometryProjection(M, images_loaded, calibration, mode = "avg"):
+    """ Projects the points in each image and compute the radiometry of the point according to different methods"""
     if mode == "avg" :
         n = len(images_loaded)
         L = []
@@ -49,7 +50,7 @@ def computeRadiometryProjection(M, images_loaded, calibration, mode = "avg"):
             my = int(np.round(m[1]))
 
                
-            if (0 < mx < size[0]) and (0 < my < size[1]):  # because i,j != x,y
+            if (0 < mx < size[0]) and (0 < my < size[1]) and np.isfinite(data[my, mx]):  # because i,j != x,y
                 L.append(int(data[my, mx]*0.0038909912109375))
                 
         if len(L) != 0:
